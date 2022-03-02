@@ -165,7 +165,7 @@ async def purgeFunc(_, message: Message):
             message_ids = []
 
     # Delete if any messages left
-    if len(message_ids) > 0:
+    if message_ids:
         await app.delete_messages(
             chat_id=chat_id,
             message_ids=message_ids,
@@ -406,7 +406,7 @@ async def pin(_, message: Message):
         f"**Pinned [this]({r.link}) message.**",
         disable_web_page_preview=True,
     )
-    msg = "Please check the pinned message: ~ " + f"[Check, {r.link}]"
+    msg = f"Please check the pinned message: ~ [Check, {r.link}]"
     filter_ = dict(type="text", data=msg)
     await save_filter(message.chat.id, "~pinned", filter_)
 
@@ -487,13 +487,13 @@ async def unmute(_, message: Message):
 async def ban_deleted_accounts(_, message: Message):
     chat_id = message.chat.id
     deleted_users = []
-    banned_users = 0
     m = await message.reply("Finding ghosts...")
 
     async for i in app.iter_chat_members(chat_id):
         if i.user.is_deleted:
             deleted_users.append(i.user.id)
-    if len(deleted_users) > 0:
+    if deleted_users:
+        banned_users = 0
         for deleted_user in deleted_users:
             try:
                 await message.chat.ban_member(deleted_user)
@@ -532,10 +532,7 @@ async def warn_user(_, message: Message):
     )
     mention = user.mention
     keyboard = ikb({"🚨  Remove Warn  🚨": f"unwarn_{user_id}"})
-    if warns:
-        warns = warns["warns"]
-    else:
-        warns = 0
+    warns = warns["warns"] if warns else 0
     if message.command[0][0] == "d":
         await message.reply_to_message.delete()
     if warns >= 2:

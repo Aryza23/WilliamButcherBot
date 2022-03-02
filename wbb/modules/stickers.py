@@ -197,7 +197,7 @@ async def kang(client, message: Message):
     # Find an available pack & add the sticker to the pack; create a new pack if needed
     # Would be a good idea to cache the number instead of searching it every single time...
     packnum = 0
-    packname = "f" + str(message.from_user.id) + "_by_" + BOT_USERNAME
+    packname = f"f{str(message.from_user.id)}_by_{BOT_USERNAME}"
     limit = 0
     try:
         while True:

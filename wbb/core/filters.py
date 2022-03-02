@@ -51,15 +51,11 @@ def anonymous(_, __, message: Message) -> bool:
 
 
 def sudoers(_, __, message: Message) -> bool:
-    if not message.from_user:
-        return False
-    return message.from_user.id in SUDOERS
+    return False if not message.from_user else message.from_user.id in SUDOERS
 
 
 def owner(_, __, message: Message) -> bool:
-    if not message.from_user:
-        return False
-    return message.from_user.id == OWNER_ID
+    return False if not message.from_user else message.from_user.id == OWNER_ID
 
 
 class Filters:

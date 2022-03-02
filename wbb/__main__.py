@@ -46,7 +46,7 @@ async def start_bot():
     global HELPABLE
 
     for module in ALL_MODULES:
-        imported_module = importlib.import_module("wbb.modules." + module)
+        imported_module = importlib.import_module(f"wbb.modules.{module}")
         if (
             hasattr(imported_module, "__MODULE__")
             and imported_module.__MODULE__
@@ -223,31 +223,30 @@ async def help_command(_, message):
             await message.reply(
                 "Pm Me For More Details.", reply_markup=keyboard
             )
-    else:
-        if len(message.command) >= 2:
-            name = (message.text.split(None, 1)[1]).replace(" ", "_").lower()
-            if str(name) in HELPABLE:
-                text = (
-                    f"Here is the help for **{HELPABLE[name].__MODULE__}**:\n"
-                    + HELPABLE[name].__HELP__
-                )
-                await message.reply(text, disable_web_page_preview=True)
-            else:
-                text, help_keyboard = await help_parser(
-                    message.from_user.first_name
-                )
-                await message.reply(
-                    text,
-                    reply_markup=help_keyboard,
-                    disable_web_page_preview=True,
-                )
+    elif len(message.command) >= 2:
+        name = (message.text.split(None, 1)[1]).replace(" ", "_").lower()
+        if str(name) in HELPABLE:
+            text = (
+                f"Here is the help for **{HELPABLE[name].__MODULE__}**:\n"
+                + HELPABLE[name].__HELP__
+            )
+            await message.reply(text, disable_web_page_preview=True)
         else:
             text, help_keyboard = await help_parser(
                 message.from_user.first_name
             )
             await message.reply(
-                text, reply_markup=help_keyboard, disable_web_page_preview=True
+                text,
+                reply_markup=help_keyboard,
+                disable_web_page_preview=True,
             )
+    else:
+        text, help_keyboard = await help_parser(
+            message.from_user.first_name
+        )
+        await message.reply(
+            text, reply_markup=help_keyboard, disable_web_page_preview=True
+        )
     return
 
 

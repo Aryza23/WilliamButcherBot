@@ -107,7 +107,7 @@ async def blacklist_filters_re(_, message):
         return
     list_of_filters = await get_blacklisted_words(chat_id)
     for word in list_of_filters:
-        pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
+        pattern = f"( |^|[^\\w]){re.escape(word)}( |$|[^\\w])"
         if re.search(pattern, text, flags=re.IGNORECASE):
             if user.id in await list_admins(chat_id):
                 return
